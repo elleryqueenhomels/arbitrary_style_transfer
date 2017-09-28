@@ -70,7 +70,7 @@ def _handler2(content_path, style_path, encoder_path, model_path,
     with tf.Graph().as_default(), tf.Session() as sess:
         # build the dataflow graph
         content = tf.placeholder(
-            tf.float32, shape=content_img.shape, name='content')
+            tf.float32, shape=(1, None, None, 3), name='content')
         style   = tf.placeholder(
             tf.float32, shape=style_img.shape, name='style')
 
