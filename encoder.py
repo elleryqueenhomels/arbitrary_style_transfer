@@ -54,6 +54,12 @@ class Encoder(object):
         else:
             return image - np.array([123.68, 116.779, 103.939])
 
+    def deprocess(self, image, mode='BGR'):
+        if mode == 'BGR':
+            return image + np.array([103.939, 116.779, 123.68])
+        else:
+            return image + np.array([123.68, 116.779, 103.939])
+
 
 def conv2d(x, weight, bias, scope='conv'):
     with tf.variable_scope(scope):
