@@ -35,12 +35,13 @@ class StyleTransferNet(object):
 
         # pass the encoded images to AdaIN
         target_features = AdaIN(enc_c, enc_s)
+        self.target_features = target_features
 
         # decode the target features back to image
         generated_img = decode(target_features)
 
-        self.target_features = target_features
-        self.generated_img   = generated_img
+        # deprocess image
+        generated_img = encoder.deprocess(generated_img)
 
         # switch BGR back to RGB
         output = tf.reverse(generated_img, axis=[-1])
