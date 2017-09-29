@@ -14,6 +14,7 @@ STYLE_LAYERS  = ('relu1_1', 'relu2_1', 'relu3_1', 'relu4_1')
 TRAINING_IMAGE_SHAPE = (256, 256, 3) # (height, width, color_channels)
 
 EPOCHS = 2
+EPSILON = 1e-5
 BATCH_SIZE = 8
 LEARNING_RATE = 1e-3
 
@@ -57,7 +58,7 @@ def train(style_weight, content_imgs_path, style_imgs_path, encoder_path, save_p
         enc_gen, enc_gen_layers = stn.encoder.encode(tmp_gen_img)
 
         # compute the content loss
-        content_loss = tf.sqrt(tf.reduce_sum(tf.square(enc_gen - target_features)))
+        content_loss = tf.sqrt(tf.reduce_mean(tf.square(enc_gen - target_features)))
 
         # compute the style loss
         style_layer_loss = []
@@ -68,10 +69,11 @@ def train(style_weight, content_imgs_path, style_imgs_path, encoder_path, save_p
             meanS, varS = tf.nn.moments(enc_style_feat, [1, 2])
             meanG, varG = tf.nn.moments(enc_gen_feat,   [1, 2])
 
-            sigmaS, sigmaG = tf.sqrt(varS), tf.sqrt(varG)
+            sigmaS = tf.sqrt(varS + EPSILON)
+            sigmaG = tf.sqrt(varG + EPSILON)
 
-            l2_mean   = tf.sqrt(tf.reduce_sum(tf.square(meanG - meanS)))
-            l2_sigma  = tf.sqrt(tf.reduce_sum(tf.square(sigmaG - sigmaS)))
+            l2_mean   = tf.sqrt(tf.reduce_mean(tf.square(meanG - meanS)))
+            l2_sigma  = tf.sqrt(tf.reduce_mean(tf.square(sigmaG - sigmaS)))
 
             style_layer_loss.append(l2_mean + l2_sigma)
 
@@ -127,9 +129,9 @@ def train(style_weight, content_imgs_path, style_imgs_path, encoder_path, save_p
                         _content_loss, _style_loss, _loss = sess.run([content_loss, style_loss, loss], 
                             feed_dict={content: content_batch, style: style_batch})
 
-                        print('step: %d,  total loss: %f,  elapsed time: %s' % (step, _loss, elapsed_time))
-                        print('content loss: %f' % (_content_loss))
-                        print('style loss  : %f,  weighted style loss: %f\n' % (_style_loss, style_weight * _style_loss))
+                        print('step: %d,  total loss: %.3f,  elapsed time: %s' % (step, _loss, elapsed_time))
+                        print('content loss: %.3f' % (_content_loss))
+                        print('style loss  : %.3f,  weighted style loss: %.3f\n' % (_style_loss, style_weight * _style_loss))
 
         # ** Done Training & Save the model **
         saver.save(sess, save_path)
