@@ -2,7 +2,7 @@
 
 Arbitrary-Style-Per-Model Fast Neural Style Transfer Method
 
-## Discription
+## Description
 Using an <b>Encoder-AdaIN-Decoder</b> architecture Deep Convolutional Neural Network as the Style Transfer Network which can take two arbitrary images as input (one as content, the orther one as style) and output a generated image that holds the content and structure from the former and the style from the latter without re-training the network.
 The network is trained over Microsoft COCO dataset and WikiArt dataset.
 
@@ -41,7 +41,7 @@ This code is based on Huang et al. [Arbitrary Style Transfer in Real-time with A
     year = {2017},
     publisher = {GitHub},
     journal = {GitHub repository},
-    howpublished = {\url{https://github.com/elleryqueenhomels/arbitrary_style_transfer}},
+    howpublished = {\url{https://github.com/elleryqueenhomels/arbitrary_style_transfer}}
   }
 ```
 
