@@ -29,7 +29,7 @@ def main():
         style_imgs_path   = list_images('../WikiArt') # path to training style dataset
 
         for style_weight, model_save_path in zip(STYLE_WEIGHTS, MODEL_SAVE_PATHS):
-            print('\n\nBegin to train the network with the style weight: %.2f ...\n' % style_weight)
+            print('\nBegin to train the network with the style weight: %.2f ...\n' % style_weight)
 
             train(style_weight, content_imgs_path, style_imgs_path, ENCODER_WEIGHTS_PATH, model_save_path, debug=True)
 
@@ -39,7 +39,7 @@ def main():
         style_name = 'wave'
 
         for style_weight, model_save_path in zip(STYLE_WEIGHTS, MODEL_SAVE_PATHS):
-            print('\n\nBegin to generate pictures with the style weight: %.2f ...\n' % style_weight)
+            print('\nBegin to generate pictures with the style weight: %.2f ...\n' % style_weight)
 
             contents_path = list_images('images/content')
             style_path    = 'images/style/' + style_name + '.jpg'
