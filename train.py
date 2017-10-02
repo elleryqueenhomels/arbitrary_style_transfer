@@ -14,9 +14,8 @@ STYLE_LAYERS  = ('relu1_1', 'relu2_1', 'relu3_1', 'relu4_1')
 TRAINING_IMAGE_SHAPE = (256, 256, 3) # (height, width, color_channels)
 
 EPOCHS = 2
-EPSILON = 1e-5
 BATCH_SIZE = 8
-LEARNING_RATE = 1e-3
+LEARNING_RATE = 1e-4
 
 
 def train(style_weight, content_imgs_path, style_imgs_path, encoder_path, save_path, debug=False, logging_period=100):
@@ -53,12 +52,12 @@ def train(style_weight, content_imgs_path, style_imgs_path, encoder_path, save_p
         target_features = stn.target_features
 
         # pass the generated_img to the encoder, and use the output compute loss
-        tmp_gen_img = tf.reverse(generated_img, axis=[-1]) # switch RGB to BGR
-        tmp_gen_img = stn.encoder.preprocess(tmp_gen_img)  # preprocess
-        enc_gen, enc_gen_layers = stn.encoder.encode(tmp_gen_img)
+        generated_img = tf.reverse(generated_img, axis=[-1])  # switch RGB to BGR
+        generated_img = stn.encoder.preprocess(generated_img) # preprocess image
+        enc_gen, enc_gen_layers = stn.encoder.encode(generated_img)
 
         # compute the content loss
-        content_loss = tf.sqrt(tf.reduce_mean(tf.square(enc_gen - target_features)))
+        content_loss = tf.reduce_sum(tf.reduce_mean(tf.square(enc_gen - target_features), axis=[1, 2]))
 
         # compute the style loss
         style_layer_loss = []
@@ -69,11 +68,11 @@ def train(style_weight, content_imgs_path, style_imgs_path, encoder_path, save_p
             meanS, varS = tf.nn.moments(enc_style_feat, [1, 2])
             meanG, varG = tf.nn.moments(enc_gen_feat,   [1, 2])
 
-            sigmaS = tf.sqrt(varS + EPSILON)
-            sigmaG = tf.sqrt(varG + EPSILON)
+            sigmaS = tf.sqrt(varS)
+            sigmaG = tf.sqrt(varG)
 
-            l2_mean   = tf.sqrt(tf.reduce_mean(tf.square(meanG - meanS)))
-            l2_sigma  = tf.sqrt(tf.reduce_mean(tf.square(sigmaG - sigmaS)))
+            l2_mean  = tf.reduce_sum(tf.square(meanG - meanS))
+            l2_sigma = tf.reduce_sum(tf.square(sigmaG - sigmaS))
 
             style_layer_loss.append(l2_mean + l2_sigma)
 
