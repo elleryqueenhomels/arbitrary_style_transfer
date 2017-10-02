@@ -1,7 +1,6 @@
 # Use a trained Image Transform Net to generate
 # a style transferred image with a specific style
 
-
 import tensorflow as tf
 
 from style_transfer_net import StyleTransferNet
