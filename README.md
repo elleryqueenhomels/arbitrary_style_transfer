@@ -9,7 +9,7 @@ The network is trained over Microsoft COCO dataset and WikiArt dataset.
 This code is based on Huang et al. [Arbitrary Style Transfer in Real-time with Adaptive Instance Normalization](https://arxiv.org/pdf/1703.06868.pdf) *(ICCV 2017)*
 
 ## Prerequisites
-- [Pre-trained VGG19 network](https://s3.amazonaws.com/lasagne/recipes/pretrained/imagenet/vgg19_normalized.pkl) (MD5 `8ee3263992981a1d26e73b3ca028a123`)
+- [Pre-trained VGG19 network](https://s3.amazonaws.com/lasagne/recipes/pretrained/imagenet/vgg19_normalized.pkl) (MD5 `cb8ee699c50a64f8fef2a82bfbb307c5`)
 - [Microsoft COCO dataset](http://msvocds.blob.core.windows.net/coco2014/train2014.zip)
 - [WikiArt dataset](https://www.kaggle.com/c/painter-by-numbers)
 
