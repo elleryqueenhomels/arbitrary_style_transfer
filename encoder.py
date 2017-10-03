@@ -3,7 +3,6 @@
 # This code is a modified version of Anish Athalye's vgg.py
 # https://github.com/anishathalye/neural-style/blob/master/vgg.py
 
-import pickle
 import numpy as np
 import tensorflow as tf
 
@@ -23,20 +22,20 @@ ENCODER_LAYERS = (
 class Encoder(object):
 
     def __init__(self, weights_path):
-        # create the TensorFlow variables
-        with open(weights_path, 'rb') as f:
-            weights = pickle.load(f, encoding='latin-1')['param values']
+        # load weights (kernel and bias) from npz file
+        weights = np.load(weights_path)
 
         idx = 0
         self.weight_vars = []
 
+        # create the TensorFlow variables
         with tf.variable_scope('encoder'):
             for layer in ENCODER_LAYERS:
                 kind = layer[:4]
 
                 if kind == 'conv':
-                    kernel = weights[idx].transpose([2, 3, 1, 0])
-                    bias   = weights[idx + 1]
+                    kernel = weights['arr_%d' % idx].transpose([2, 3, 1, 0])
+                    bias   = weights['arr_%d' % (idx + 1)]
                     idx += 2
 
                     with tf.variable_scope(layer):
