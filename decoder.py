@@ -8,44 +8,57 @@ import tensorflow as tf
 WEIGHT_INIT_STDDEV = 0.1
 
 
-def decode(image):
+class Decoder(object):
 
-    with tf.variable_scope('decoder'):
-        conv4_1 = conv2d(image, 512, 256, 3, 1, 'conv4_1')
-        conv4_1 = upsample(conv4_1)
+    def __init__(self):
+        self.weight_vars = []
 
-        conv3_4 = conv2d(conv4_1, 256, 256, 3, 1, 'conv3_4')
-        conv3_3 = conv2d(conv3_4, 256, 256, 3, 1, 'conv3_3')
-        conv3_2 = conv2d(conv3_3, 256, 256, 3, 1, 'conv3_2')
-        conv3_1 = conv2d(conv3_2, 256, 128, 3, 1, 'conv3_1')
-        conv3_1 = upsample(conv3_1)
+        with tf.variable_scope('decoder'):
+            self.weight_vars.append(self._create_variables(512, 256, 3, scope='conv4_1'))
 
-        conv2_2 = conv2d(conv3_1, 128, 128, 3, 1, 'conv2_2')
-        conv2_1 = conv2d(conv2_2, 128,  64, 3, 1, 'conv2_1')
-        conv2_1 = upsample(conv2_1)
+            self.weight_vars.append(self._create_variables(256, 256, 3, scope='conv3_4'))
+            self.weight_vars.append(self._create_variables(256, 256, 3, scope='conv3_3'))
+            self.weight_vars.append(self._create_variables(256, 256, 3, scope='conv3_2'))
+            self.weight_vars.append(self._create_variables(256, 128, 3, scope='conv3_1'))
 
-        conv1_2 = conv2d(conv2_1, 64, 64, 3, 1, 'conv1_2')
-        conv1_1 = conv2d(conv1_2, 64,  3, 3, 1, 'conv1_1')
+            self.weight_vars.append(self._create_variables(128, 128, 3, scope='conv2_2'))
+            self.weight_vars.append(self._create_variables(128,  64, 3, scope='conv2_1'))
 
-    return conv1_1
+            self.weight_vars.append(self._create_variables( 64,  64, 3, scope='conv1_2'))
+            self.weight_vars.append(self._create_variables( 64,   3, 3, scope='conv1_1'))
+
+    def _create_variables(self, input_filters, output_filters, kernel_size, scope):
+        with tf.variable_scope(scope):
+            shape  = [kernel_size, kernel_size, input_filters, output_filters]
+            kernel = tf.Variable(tf.truncated_normal(shape, stddev=WEIGHT_INIT_STDDEV), name='kernel')
+            bias   = tf.Variable(tf.zeros([output_filters]), name='bias')
+            return (kernel, bias)
+
+    def decode(self, image):
+        # upsampling after 'conv4_1', 'conv3_1', 'conv2_1'
+        upsample_indices = (0, 4, 6)
+
+        out = image
+        for i in range(len(self.weight_vars)):
+            kernel, bias = self.weight_vars[i]
+
+            out = conv2d(out, kernel, bias)
+            
+            if i in upsample_indices:
+                out = upsample(out)
+
+        return out
 
 
-def conv2d(x, input_filters, output_filters, kernel_size, strides, scope='conv'):
-    with tf.variable_scope(scope):
-        # define variables
-        shape  = [kernel_size, kernel_size, input_filters, output_filters]
-        weight = tf.Variable(tf.truncated_normal(shape, stddev=WEIGHT_INIT_STDDEV), name='weight')
-        bias   = tf.Variable(tf.zeros([output_filters]), name='bias')
+def conv2d(x, kernel, bias):
+    # padding image with reflection mode
+    x_padded = tf.pad(x, [[0, 0], [1, 1], [1, 1], [0, 0]], mode='REFLECT')
 
-        # padding image with reflection mode
-        padding  = int(kernel_size // 2)
-        x_padded = tf.pad(x, [[0, 0], [padding, padding], [padding, padding], [0, 0]], mode='REFLECT')
+    # conv and add bias
+    out = tf.nn.conv2d(x_padded, kernel, strides=[1, 1, 1, 1], padding='VALID')
+    out = tf.nn.bias_add(out, bias)
 
-        # conv and add bias
-        out = tf.nn.conv2d(x_padded, weight, strides=[1, strides, strides, 1], padding='VALID')
-        out = tf.nn.bias_add(out, bias)
-
-        return tf.nn.relu(out)
+    return tf.nn.relu(out)
 
 
 def upsample(x, strides=2):

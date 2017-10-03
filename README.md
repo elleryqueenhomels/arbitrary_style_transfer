@@ -9,7 +9,7 @@ The network is trained over Microsoft COCO dataset and WikiArt dataset.
 This code is based on Huang et al. [Arbitrary Style Transfer in Real-time with Adaptive Instance Normalization](https://arxiv.org/pdf/1703.06868.pdf) *(ICCV 2017)*
 
 ## Prerequisites
-- [Pre-trained VGG19 network](http://www.vlfeat.org/matconvnet/models/beta16/imagenet-vgg-verydeep-19.mat) (MD5 `8ee3263992981a1d26e73b3ca028a123`) <br/><b>I have provided a convertor in the `tool` folder. It can convert the matlab file into a npz file which is much smaller and easier to process via NumPy.</b> <br/><b>Or simply download my pre-processed</b> [Pre-trained VGG19 network npz format](http://pan.baidu.com/s/1nv4ZQI1) (MD5 `c7ddd13b12e40033b5031ff43e467065`) <b>The npz format is about 80MB while the mat format is about 550MB.</b>
+- [Pre-trained VGG19 normalised network](https://s3.amazonaws.com/xunhuang-public/adain/vgg_normalised.t7) (MD5 `c637adfa9cee4b33b59c5a754883ba82`) <br/><b>I have provided a convertor in the `tool` folder. It can extract kernel and bias from the torch model file (.t7 format) and save them into a npz file which is easier to process via NumPy.</b> <br/><b>Or you can simply download my pre-processed file:</b> <br/>[Pre-trained VGG19 normalised network npz format](http://pan.baidu.com/s/1qYRvpaW) (MD5 `c5c961738b134ffe206e0a552c728aea`)
 - [Microsoft COCO dataset](http://msvocds.blob.core.windows.net/coco2014/train2014.zip)
 - [WikiArt dataset](https://www.kaggle.com/c/painter-by-numbers)
 
