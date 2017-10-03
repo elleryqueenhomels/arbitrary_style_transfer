@@ -9,7 +9,7 @@ from utils import list_images
 
 IS_TRAINING = True
 
-ENCODER_WEIGHTS_PATH = './vgg19_normalized.pkl'
+ENCODER_WEIGHTS_PATH = './vgg19_normalised.npz'
 
 STYLE_WEIGHTS = [0.01, 0.1, 1.0, 10.0]
 
