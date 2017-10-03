@@ -36,6 +36,8 @@ class Encoder(object):
                 if kind == 'conv':
                     kernel = weights['arr_%d' % idx].transpose([2, 3, 1, 0])
                     bias   = weights['arr_%d' % (idx + 1)]
+                    kernel = kernel.astype(np.float32)
+                    bias   = bias.astype(np.float32)
                     idx += 2
 
                     with tf.variable_scope(layer):
