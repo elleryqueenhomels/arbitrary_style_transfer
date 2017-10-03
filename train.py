@@ -14,6 +14,7 @@ STYLE_LAYERS  = ('relu1_1', 'relu2_1', 'relu3_1', 'relu4_1')
 TRAINING_IMAGE_SHAPE = (256, 256, 3) # (height, width, color_channels)
 
 EPOCHS = 2
+EPSILON = 1e-5
 BATCH_SIZE = 8
 LEARNING_RATE = 1e-4
 
@@ -68,8 +69,8 @@ def train(style_weight, content_imgs_path, style_imgs_path, encoder_path, save_p
             meanS, varS = tf.nn.moments(enc_style_feat, [1, 2])
             meanG, varG = tf.nn.moments(enc_gen_feat,   [1, 2])
 
-            sigmaS = tf.sqrt(varS)
-            sigmaG = tf.sqrt(varG)
+            sigmaS = tf.sqrt(varS + EPSILON)
+            sigmaG = tf.sqrt(varG + EPSILON)
 
             l2_mean  = tf.reduce_sum(tf.square(meanG - meanS))
             l2_sigma = tf.reduce_sum(tf.square(sigmaG - sigmaS))
