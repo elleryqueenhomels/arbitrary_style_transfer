@@ -11,13 +11,20 @@ IS_TRAINING = True
 
 ENCODER_WEIGHTS_PATH = './vgg19_normalised.npz'
 
-STYLE_WEIGHTS = [0.01, 0.1, 1.0, 10.0]
+STYLE_WEIGHTS = [1.0, 0.5, 10.0, 0.1, 0.01]
 
 MODEL_SAVE_PATHS = [
-    'models/style_weight_1e-2.ckpt',
-    'models/style_weight_1e-1.ckpt',
     'models/style_weight_1e0.ckpt',
+    'models/style_weight_5e-1.ckpt',
     'models/style_weight_1e1.ckpt',
+    'models/style_weight_1e-1.ckpt',
+    'models/style_weight_1e-2.ckpt',
+]
+
+STYLES = [
+    'wave', 'udnie', 'escher_sphere', 'flower', 
+    'scream', 'denoised_starry', 'rain_princess', 
+    'woman_matisse', 'mosaic'
 ]
 
 
@@ -36,20 +43,21 @@ def main():
             print('\nSuccessfully! Done training...\n')
     else:
 
-        style_name = 'wave'
+        for style_name in STYLES:
 
-        for style_weight, model_save_path in zip(STYLE_WEIGHTS, MODEL_SAVE_PATHS):
-            print('\nBegin to generate pictures with the style weight: %.2f ...\n' % style_weight)
+            print('\nUse "%s.jpg" as style to generate images:')
 
-            contents_path = list_images('images/content')
-            style_path    = 'images/style/' + style_name + '.jpg'
-            output_save_path = 'outputs'
+            for style_weight, model_save_path in zip(STYLE_WEIGHTS, MODEL_SAVE_PATHS):
+                print('\nBegin to generate images with the style weight: %.2f ...\n' % style_weight)
 
-            generated_images = generate(contents_path, style_path, ENCODER_WEIGHTS_PATH, model_save_path, 
-                output_path=output_save_path, prefix=style_name + '-', suffix='-' + str(style_weight))
+                contents_path = list_images('images/content')
+                style_path    = 'images/style/' + style_name + '.jpg'
+                output_save_path = 'outputs'
 
-            print('\ntype(generated_images):', type(generated_images))
-            print('\nlen(generated_images):', len(generated_images), '\n')
+                generated_images = generate(contents_path, style_path, ENCODER_WEIGHTS_PATH, model_save_path, 
+                    output_path=output_save_path, prefix=style_name + '-', suffix='-' + str(style_weight))
+
+                print('\nlen(generated_images): %d\n' % len(generated_images))
 
 
 if __name__ == '__main__':
