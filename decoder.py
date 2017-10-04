@@ -61,9 +61,9 @@ def conv2d(x, kernel, bias):
     return tf.nn.relu(out)
 
 
-def upsample(x, strides=2):
-    height = tf.shape(x)[1] * strides
-    width  = tf.shape(x)[2] * strides
+def upsample(x, scale=2):
+    height = tf.shape(x)[1] * scale
+    width  = tf.shape(x)[2] * scale
     output = tf.image.resize_images(x, [height, width], 
         method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
     return output
