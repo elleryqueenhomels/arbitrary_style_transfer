@@ -2,7 +2,7 @@
 # npz file.
 # original vgg_normalised torch model (.t7 format) download link:
 # https://s3.amazonaws.com/xunhuang-public/adain/vgg_normalised.t7
-# credits: Xun Huang (https://github.com/xunhuang1995)
+# torch model credits: Xun Huang (https://github.com/xunhuang1995)
 
 import torch
 import numpy as np
