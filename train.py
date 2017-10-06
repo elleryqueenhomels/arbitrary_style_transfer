@@ -113,6 +113,11 @@ def train(style_weight, content_imgs_path, style_imgs_path, encoder_path, save_p
                 content_batch = get_train_images(content_batch_path, crop_height=HEIGHT, crop_width=WIDTH)
                 style_batch   = get_train_images(style_batch_path,   crop_height=HEIGHT, crop_width=WIDTH)
 
+
+                if content_batch == () or style_batch == ():
+                    continue
+
+
                 # run the training step
                 sess.run(train_op, feed_dict={content: content_batch, style: style_batch})
 
