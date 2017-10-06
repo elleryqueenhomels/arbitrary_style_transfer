@@ -32,8 +32,14 @@ def main():
 
     if IS_TRAINING:
 
-        content_imgs_path = list_images('../MS_COCO') # path to training content dataset
-        style_imgs_path   = list_images('../WikiArt') # path to training style dataset
+        content_imgs_path = list_images('D:/ImageDatabase/Microsoft_COCO2014/train2014')  # path to training content dataset
+        style_imgs_path = list_images('D:/ImageDatabase/WikiArt_database/all')  # path to training style dataset
+
+        # content_imgs_path = list_images('D:/ImageDatabase/Microsoft_COCO2014/train2014')  # path to training content dataset
+        # style_imgs_path = list_images('D:/ImageDatabase/WikiArt_database/train_1')  # path to training style dataset
+
+        # content_imgs_path = list_images('D:/ImageDatabase/train_data_temp/MS_COCO_1000')  # path to training content dataset
+        # style_imgs_path = list_images('D:/ImageDatabase/train_data_temp/WikiArt_1000')  # path to training style dataset
 
         for style_weight, model_save_path in zip(STYLE_WEIGHTS, MODEL_SAVE_PATHS):
             print('\nBegin to train the network with the style weight: %.2f ...\n' % style_weight)
