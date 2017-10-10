@@ -24,6 +24,8 @@ def get_train_images(paths, resize_len=512, crop_height=256, crop_width=256):
     images = []
     for path in paths:
         image = imread(path, mode='RGB')
+        if image.shape == ():
+            return image.shape
         height, width, _ = image.shape
 
         if height < width:
