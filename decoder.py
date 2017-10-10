@@ -37,12 +37,16 @@ class Decoder(object):
     def decode(self, image):
         # upsampling after 'conv4_1', 'conv3_1', 'conv2_1'
         upsample_indices = (0, 4, 6)
+        final_layer_idx  = len(self.weight_vars) - 1
 
         out = image
         for i in range(len(self.weight_vars)):
             kernel, bias = self.weight_vars[i]
 
-            out = conv2d(out, kernel, bias)
+            if i == final_layer_idx:
+                out = conv2d(out, kernel, bias, use_relu=False)
+            else:
+                out = conv2d(out, kernel, bias)
             
             if i in upsample_indices:
                 out = upsample(out)
@@ -50,7 +54,7 @@ class Decoder(object):
         return out
 
 
-def conv2d(x, kernel, bias):
+def conv2d(x, kernel, bias, use_relu=True):
     # padding image with reflection mode
     x_padded = tf.pad(x, [[0, 0], [1, 1], [1, 1], [0, 0]], mode='REFLECT')
 
@@ -58,7 +62,10 @@ def conv2d(x, kernel, bias):
     out = tf.nn.conv2d(x_padded, kernel, strides=[1, 1, 1, 1], padding='VALID')
     out = tf.nn.bias_add(out, bias)
 
-    return tf.nn.relu(out)
+    if use_relu:
+        out = tf.nn.relu(out)
+
+    return out
 
 
 def upsample(x, scale=2):
