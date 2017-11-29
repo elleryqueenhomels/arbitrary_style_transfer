@@ -14,7 +14,7 @@ This code is based on Huang et al. [Arbitrary Style Transfer in Real-time with A
 - [WikiArt dataset](https://www.kaggle.com/c/painter-by-numbers)
 
 ## Trained Model
-You can download my trained model from [here](https://s3-us-west-2.amazonaws.com/wengaoye/arbitrary_style_model_style-weight-2e0.zip) which is trained with style weight equal to 2.0<br/>Or you can directly use `download.sh` in the repo.
+You can download my trained model from [here](https://s3-us-west-2.amazonaws.com/wengaoye/arbitrary_style_model_style-weight-2e0.zip) which is trained with style weight equal to 2.0<br/>Or you can directly use `download_trained_model.sh` in the repo.
 
 ## Manual
 - The main file `main.py` is a demo, which has already contained training procedure and inferring procedure (inferring means generating stylized images).<br />You can switch these two procedures by changing the flag `IS_TRAINING`.
@@ -22,6 +22,29 @@ You can download my trained model from [here](https://s3-us-west-2.amazonaws.com
 - For training, you should make sure (3), (4), (5) and (6) are prepared correctly.
 - For inferring, you should make sure (1), (2), (3) and (6) are prepared correctly.
 - Of course, you can organize all the files and folders as you want, and what you need to do is just modifying related parameters in the `main.py` file.
+
+## Results
+| style | output (generated image) |
+| :----: | :----: |
+|![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/images/style_thumb/udnie_thumb.jpg)|  ![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/outputs/udnie-lance-2.0.jpg)  |
+|![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/images/style_thumb/escher_sphere_thumb.jpg)|  ![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/outputs/escher_sphere-lance-2.0.jpg)  |
+|![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/images/style_thumb/mosaic_thumb.jpg)|  ![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/outputs/mosaic-lance-2.0.jpg)  |
+|![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/images/style_thumb/cat_thumb.jpg)|  ![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/outputs/cat-lance-2.0.jpg)  |
+|![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/images/style_thumb/lion_thumb.jpg)|  ![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/outputs/lion-lance-2.0.jpg)  |
+|![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/images/style_thumb/woman_matisse_thumb.jpg)|  ![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/outputs/woman_matisse-lance-2.0.jpg)  |
+|![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/images/style_thumb/udnie_thumb.jpg)|  ![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/outputs/udnie-brad_pitt-2.0.jpg)  |
+|![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/images/style_thumb/escher_sphere_thumb.jpg)|  ![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/outputs/escher_sphere-brad_pitt-2.0.jpg)  |
+|![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/images/style_thumb/mosaic_thumb.jpg)|  ![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/outputs/mosaic-brad_pitt-2.0.jpg)  |
+|![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/images/style_thumb/udnie_thumb.jpg)|  ![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/outputs/udnie-chicago-2.0.jpg)  |
+|![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/images/style_thumb/escher_sphere_thumb.jpg)|  ![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/outputs/escher_sphere-chicago-2.0.jpg)  |
+|![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/images/style_thumb/cat_thumb.jpg)|  ![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/outputs/cat-chicago-2.0.jpg)  |
+|![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/images/style_thumb/lion_thumb.jpg)|  ![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/outputs/lion-chicago-2.0.jpg)  |
+|![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/images/style_thumb/woman_matisse_thumb.jpg)|  ![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/outputs/woman_matisse-chicago-2.0.jpg)  |
+|![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/images/style_thumb/escher_sphere_thumb.jpg)|  ![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/outputs/escher_sphere-karya-2.0.jpg)  |
+|![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/images/style_thumb/lion_thumb.jpg)|  ![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/outputs/lion-karya-2.0.jpg)  |
+|![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/images/style_thumb/escher_sphere_thumb.jpg)|  ![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/outputs/escher_sphere-stata-2.0.jpg)  |
+|![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/images/style_thumb/mosaic_thumb.jpg)|  ![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/outputs/mosaic-stata-2.0.jpg)  |
+|![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/images/style_thumb/cat_thumb.jpg)|  ![](https://github.com/elleryqueenhomels/arbitrary_style_transfer/blob/master/outputs/cat-stata-2.0.jpg)  |
 
 ## My Running Environment
 <b>Hardware</b>
