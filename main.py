@@ -40,7 +40,7 @@ def main():
 
         for style_name in STYLES:
 
-            print('\nUse "%s.jpg" as style to generate images:')
+            print('\nUse "%s.jpg" as style to generate images:' % style_name)
 
             for style_weight, model_save_path in zip(STYLE_WEIGHTS, MODEL_SAVE_PATHS):
                 print('\nBegin to generate images with the style weight: %.2f ...\n' % style_weight)
