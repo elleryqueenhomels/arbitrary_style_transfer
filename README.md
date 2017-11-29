@@ -13,6 +13,16 @@ This code is based on Huang et al. [Arbitrary Style Transfer in Real-time with A
 - [Microsoft COCO dataset](http://msvocds.blob.core.windows.net/coco2014/train2014.zip)
 - [WikiArt dataset](https://www.kaggle.com/c/painter-by-numbers)
 
+## Trained Model
+You can download my trained model from [here](https://s3-us-west-2.amazonaws.com/wengaoye/arbitrary_style_model_style-weight-2e0.zip) which is trained with style weight equal to 2.0<br/>Or you can directly use `download.sh` in the repo.
+
+## Manual
+- The main file `main.py` is a demo, which has already contained training procedure and inferring procedure (inferring means generating stylized images).<br />You can switch these two procedures by changing the flag `IS_TRAINING`.
+- By default,<br />(1) The content images lie in the folder `"./images/content/"`<br />(2) The style images lie in the folder `"./images/style/"`<br />(3) The weights file of the pre-trained VGG-19 lies in the current working directory. (See `Prerequisites` above. By the way, `download_vgg19.sh` already takes care of this.)<br />(4) The MS-COCO images dataset for training lies in the folder `"../MS_COCO/"` (See `Prerequisites` above)<br />(5) The WikiArt images dataset for training lies in the folder `"../WikiArt/"` (See `Prerequisites` above)<br />(6) The checkpoint files of trained models lie in the folder `"./models/"` (You should create this folder manually before training.)<br />(7) After inferring procedure, the stylized images will be generated and output to the folder `"./outputs/"`
+- For training, you should make sure (3), (4), (5) and (6) are prepared correctly.
+- For inferring, you should make sure (1), (2), (3) and (6) are prepared correctly.
+- Of course, you can organize all the files and folders as you want, and what you need to do is just modifying related parameters in the `main.py` file.
+
 ## My Running Environment
 <b>Hardware</b>
 - CPU: Intel® Core™ i9-7900X (3.30GHz x 10 cores, 20 threads)
