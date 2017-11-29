@@ -90,7 +90,7 @@ def train(style_weight, content_imgs_path, style_imgs_path, encoder_path, save_p
         # saver = tf.train.Saver()
         saver = tf.train.Saver(keep_checkpoint_every_n_hours=1)
 
-        # ** Start Training **
+        """Start Training"""
         step = 0
         n_batches = int(len(content_imgs_path) // BATCH_SIZE)
 
@@ -100,40 +100,45 @@ def train(style_weight, content_imgs_path, style_imgs_path, encoder_path, save_p
             print('Now begin to train the model...\n')
             start_time = datetime.now()
 
-        for epoch in range(EPOCHS):
+        try:
+            for epoch in range(EPOCHS):
 
-            np.random.shuffle(content_imgs_path)
-            np.random.shuffle(style_imgs_path)
+                np.random.shuffle(content_imgs_path)
+                np.random.shuffle(style_imgs_path)
 
-            for batch in range(n_batches):
-                # retrive a batch of content and style images
-                content_batch_path = content_imgs_path[batch*BATCH_SIZE:(batch*BATCH_SIZE + BATCH_SIZE)]
-                style_batch_path   = style_imgs_path[batch*BATCH_SIZE:(batch*BATCH_SIZE + BATCH_SIZE)]
+                for batch in range(n_batches):
+                    # retrive a batch of content and style images
+                    content_batch_path = content_imgs_path[batch*BATCH_SIZE:(batch*BATCH_SIZE + BATCH_SIZE)]
+                    style_batch_path   = style_imgs_path[batch*BATCH_SIZE:(batch*BATCH_SIZE + BATCH_SIZE)]
 
-                content_batch = get_train_images(content_batch_path, crop_height=HEIGHT, crop_width=WIDTH)
-                style_batch   = get_train_images(style_batch_path,   crop_height=HEIGHT, crop_width=WIDTH)
+                    content_batch = get_train_images(content_batch_path, crop_height=HEIGHT, crop_width=WIDTH)
+                    style_batch   = get_train_images(style_batch_path,   crop_height=HEIGHT, crop_width=WIDTH)
 
-                # run the training step
-                sess.run(train_op, feed_dict={content: content_batch, style: style_batch})
+                    # run the training step
+                    sess.run(train_op, feed_dict={content: content_batch, style: style_batch})
 
-                step += 1
+                    step += 1
 
-                if step % 1000 == 0:
-                    saver.save(sess, save_path, global_step=step)
+                    if step % 1000 == 0:
+                        saver.save(sess, save_path, global_step=step)
 
-                if debug:
-                    is_last_step = (epoch == EPOCHS - 1) and (batch == n_batches - 1)
+                    if debug:
+                        is_last_step = (epoch == EPOCHS - 1) and (batch == n_batches - 1)
 
-                    if is_last_step or step % logging_period == 0:
-                        elapsed_time = datetime.now() - start_time
-                        _content_loss, _style_loss, _loss = sess.run([content_loss, style_loss, loss], 
-                            feed_dict={content: content_batch, style: style_batch})
+                        if is_last_step or step % logging_period == 0:
+                            elapsed_time = datetime.now() - start_time
+                            _content_loss, _style_loss, _loss = sess.run([content_loss, style_loss, loss], 
+                                feed_dict={content: content_batch, style: style_batch})
 
-                        print('step: %d,  total loss: %.3f,  elapsed time: %s' % (step, _loss, elapsed_time))
-                        print('content loss: %.3f' % (_content_loss))
-                        print('style loss  : %.3f,  weighted style loss: %.3f\n' % (_style_loss, style_weight * _style_loss))
+                            print('step: %d,  total loss: %.3f,  elapsed time: %s' % (step, _loss, elapsed_time))
+                            print('content loss: %.3f' % (_content_loss))
+                            print('style loss  : %.3f,  weighted style loss: %.3f\n' % (_style_loss, style_weight * _style_loss))
+        except:
+            tmp_save_path = save_path + '-' + str(step)
+            saver.save(sess, tmp_save_path)
+            print('\nSomething wrong happens! Current model is saved to <%s>\n' % tmp_save_path)
 
-        # ** Done Training & Save the model **
+        """Done Training & Save the model"""
         saver.save(sess, save_path)
 
         if debug:
