@@ -7,18 +7,17 @@ from generate import generate
 from utils import list_images
 
 
-IS_TRAINING = True
+IS_TRAINING = False
 
 ENCODER_WEIGHTS_PATH = './vgg19_normalised.npz'
 
-STYLE_WEIGHTS = [1.0, 0.5, 10.0, 0.1, 0.01]
+STYLE_WEIGHTS = [2.0, 1.0, 0.5, 0.1]
 
 MODEL_SAVE_PATHS = [
+    'models/style_weight_2e0.ckpt',
     'models/style_weight_1e0.ckpt',
     'models/style_weight_5e-1.ckpt',
-    'models/style_weight_1e1.ckpt',
     'models/style_weight_1e-1.ckpt',
-    'models/style_weight_1e-2.ckpt',
 ]
 
 STYLES = [
