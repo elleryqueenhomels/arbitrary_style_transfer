@@ -11,19 +11,15 @@ IS_TRAINING = False
 
 ENCODER_WEIGHTS_PATH = './vgg19_normalised.npz'
 
-STYLE_WEIGHTS = [2.0, 1.0, 0.5, 0.1]
+STYLE_WEIGHTS = [2.0]
 
 MODEL_SAVE_PATHS = [
     'models/style_weight_2e0.ckpt',
-    'models/style_weight_1e0.ckpt',
-    'models/style_weight_5e-1.ckpt',
-    'models/style_weight_1e-1.ckpt',
 ]
 
 STYLES = [
-    'wave', 'udnie', 'escher_sphere', 'flower', 
-    'scream', 'denoised_starry', 'rain_princess', 
-    'woman_matisse', 'mosaic'
+    'cat', 'mosaic', 'escher_sphere',
+    'lion', 'udnie', 'woman_matisse',
 ]
 
 
