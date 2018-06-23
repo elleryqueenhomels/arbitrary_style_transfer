@@ -30,8 +30,8 @@ class Decoder(object):
     def _create_variables(self, input_filters, output_filters, kernel_size, scope):
         with tf.variable_scope(scope):
             shape  = [kernel_size, kernel_size, input_filters, output_filters]
-            kernel = tf.Variable(tf.truncated_normal(shape, stddev=WEIGHT_INIT_STDDEV), name='kernel')
-            bias   = tf.Variable(tf.zeros([output_filters]), name='bias')
+            kernel = tf.get_variable(initializer=tf.contrib.layers.xavier_initializer(uniform=False), shape=shape, name='kernel')
+            bias = tf.get_variable(initializer=tf.contrib.layers.xavier_initializer(uniform=False), shape=[output_filters], name='bias')
             return (kernel, bias)
 
     def decode(self, image):

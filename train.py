@@ -13,10 +13,12 @@ STYLE_LAYERS  = ('relu1_1', 'relu2_1', 'relu3_1', 'relu4_1')
 
 TRAINING_IMAGE_SHAPE = (256, 256, 3) # (height, width, color_channels)
 
-EPOCHS = 16
+EPOCHS = 4
 EPSILON = 1e-5
 BATCH_SIZE = 8
 LEARNING_RATE = 1e-4
+LR_DECAY_RATE = 5e-5
+DECAY_STEPS = 1.0
 
 
 def train(style_weight, content_imgs_path, style_imgs_path, encoder_path, save_path, debug=False, logging_period=100):
@@ -83,12 +85,14 @@ def train(style_weight, content_imgs_path, style_imgs_path, encoder_path, save_p
         loss = content_loss + style_weight * style_loss
 
         # Training step
-        train_op = tf.train.AdamOptimizer(LEARNING_RATE).minimize(loss)
+        global_step = tf.Variable(0, trainable=False)
+        learning_rate = tf.train.inverse_time_decay(LEARNING_RATE, global_step, DECAY_STEPS, LR_DECAY_RATE)
+        train_op = tf.train.AdamOptimizer(learning_rate).minimize(loss, global_step=global_step)
 
         sess.run(tf.global_variables_initializer())
 
         # saver = tf.train.Saver()
-        saver = tf.train.Saver(keep_checkpoint_every_n_hours=1)
+        saver = tf.train.Saver()
 
         """Start Training"""
         step = 0
@@ -96,9 +100,9 @@ def train(style_weight, content_imgs_path, style_imgs_path, encoder_path, save_p
 
         if debug:
             elapsed_time = datetime.now() - start_time
+            start_time = datetime.now()
             print('\nElapsed time for preprocessing before actually train the model: %s' % elapsed_time)
             print('Now begin to train the model...\n')
-            start_time = datetime.now()
 
         try:
             for epoch in range(EPOCHS):
@@ -120,12 +124,12 @@ def train(style_weight, content_imgs_path, style_imgs_path, encoder_path, save_p
                     step += 1
 
                     if step % 1000 == 0:
-                        saver.save(sess, save_path, global_step=step)
+                        saver.save(sess, save_path, global_step=step, write_meta_graph=False)
 
                     if debug:
                         is_last_step = (epoch == EPOCHS - 1) and (batch == n_batches - 1)
 
-                        if is_last_step or step % logging_period == 0:
+                        if is_last_step or step == 1 or step % logging_period == 0:
                             elapsed_time = datetime.now() - start_time
                             _content_loss, _style_loss, _loss = sess.run([content_loss, style_loss, loss], 
                                 feed_dict={content: content_batch, style: style_batch})
@@ -134,8 +138,7 @@ def train(style_weight, content_imgs_path, style_imgs_path, encoder_path, save_p
                             print('content loss: %.3f' % (_content_loss))
                             print('style loss  : %.3f,  weighted style loss: %.3f\n' % (_style_loss, style_weight * _style_loss))
         except:
-            tmp_save_path = save_path + '-' + str(step)
-            saver.save(sess, tmp_save_path)
+            saver.save(sess, save_path, global_step=step)
             print('\nSomething wrong happens! Current model is saved to <%s>\n' % tmp_save_path)
 
         """Done Training & Save the model"""
