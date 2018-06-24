@@ -1,5 +1,5 @@
-# converter: extract weights from torch model, then save them into
-# npz file.
+# convertor: extract weights from torch model, then save them into
+# a npz file.
 # original vgg_normalised torch model (.t7 format) download link:
 # https://s3.amazonaws.com/xunhuang-public/adain/vgg_normalised.t7
 # torch model credits: Xun Huang (https://github.com/xunhuang1995)

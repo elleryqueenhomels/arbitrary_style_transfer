@@ -5,9 +5,6 @@
 import tensorflow as tf
 
 
-WEIGHT_INIT_STDDEV = 0.1
-
-
 class Decoder(object):
 
     def __init__(self):

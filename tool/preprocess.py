@@ -1,6 +1,6 @@
 # A Script to Pre-process WikiArt dataset
 # This script helps to discard the "bad" images
-# which cannot be well used by the training method.
+# which cannot be well used during the training.
 
 from __future__ import print_function
 
@@ -16,7 +16,7 @@ from datetime import datetime
 from scipy.misc import imread, imresize
 
 
-PATH = '../WikiArt/'
+DATA_SET_PATH = '../WikiArt/'
 
 
 def list_images(directory):
@@ -34,10 +34,11 @@ def list_images(directory):
 
 def main(dir_path):
     warnings.filterwarnings('error')
+    warnings.filterwarnings('ignore', category=DeprecationWarning)
 
     paths = list_images(dir_path)
 
-    print('\norigin files number: %d\n' % len(paths))
+    print('\nOrigin files number: %d\n' % len(paths))
 
     num_delete = 0
 
@@ -51,8 +52,15 @@ def main(dir_path):
             num_delete += 1
             remove(path)
 
-            print('\nWarning happens! Remove image <%s>' % path)
-            print('Warning:\n', warn, '\n')
+            print('>>> Warning happens! Removes image <%s>' % path)
+            print('Warning detail:\n%s\n' % str(warn))
+        except Exception as exc:
+            is_continue = True
+            num_delete += 1
+            remove(path)
+
+            print('>>> Exception happens! Removes image <%s>' % path)
+            print('Exception detail:\n%s\n' % str(exc))
 
         if is_continue:
             continue
@@ -61,7 +69,7 @@ def main(dir_path):
             num_delete += 1
             remove(path)
 
-            print('\nimage.shape:', image.shape, ' Remove image <%s>\n' % path)
+            print('>>> Found an image with shape: %s; Now removes it: <%s>\n' % (str(image.shape), path))
         else:
             height, width, _ = image.shape
 
@@ -78,17 +86,16 @@ def main(dir_path):
                 num_delete += 1
                 remove(path)
                 
-                print('\nCannot resize image! <%s>\n' % path)
+                print('>>> Fails to resize an image! Now removes it: <%s>\n' % path)
                 traceback.print_exception(*sys.exc_info())
 
-    print('\n\ndelete %d files! Current number of files: %d\n\n' % (num_delete, len(paths) - num_delete))
+    print('\n>>>>> delete %d files! Current number of files: %d\n' % (num_delete, len(paths) - num_delete))
 
 
 if __name__ == '__main__':
     t0 = datetime.now()
 
-    main(PATH)
+    main(DATA_SET_PATH)
 
-    dt = datetime.now() - t0
-    print('elapsed time:', dt, '\n')
+    print('Elapsed time: %s\n' % (datetime.now() - t0))
 
