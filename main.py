@@ -12,7 +12,8 @@ IS_TRAINING = False
 # for training
 CONTENT_IMGS_DIR = '../MS_COCO'
 STYLE_IMGS_DIR = '../WikiArt'
-ENCODER_WEIGHTS_PATH = './vgg19_normalised.npz'
+ENCODER_WEIGHTS_PATH = 'vgg19_normalised.npz'
+LOGGING_PERIOD = 20
 
 STYLE_WEIGHTS = [2.0]
 MODEL_SAVE_PATHS = [
@@ -20,9 +21,9 @@ MODEL_SAVE_PATHS = [
 ]
 
 # for inferring (stylize)
-CONTENTS_DIR = './images/content'
-STYLES_DIR = './images/style/'
-OUTPUT_DIR = './outputs'
+CONTENTS_DIR = 'images/content/'
+STYLES_DIR = 'images/style/'
+OUTPUT_DIR = 'outputs'
 STYLES = [
     'cat', 'mosaic', 'escher_sphere',
     'lion', 'udnie', 'woman_matisse',
