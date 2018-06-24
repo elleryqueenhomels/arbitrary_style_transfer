@@ -93,7 +93,7 @@ def train(style_weight, content_imgs_path, style_imgs_path, encoder_path,
         sess.run(tf.global_variables_initializer())
 
         # saver
-        saver = tf.train.Saver()
+        saver = tf.train.Saver(max_to_keep=10)
 
         ###### Start Training ######
         step = 0
