@@ -21,7 +21,8 @@ LR_DECAY_RATE = 5e-5
 DECAY_STEPS = 1.0
 
 
-def train(style_weight, content_imgs_path, style_imgs_path, encoder_path, save_path, debug=False, logging_period=100):
+def train(style_weight, content_imgs_path, style_imgs_path, encoder_path, 
+          model_save_path, debug=False, logging_period=100):
     if debug:
         from datetime import datetime
         start_time = datetime.now()
@@ -91,10 +92,10 @@ def train(style_weight, content_imgs_path, style_imgs_path, encoder_path, save_p
 
         sess.run(tf.global_variables_initializer())
 
-        # saver = tf.train.Saver()
+        # saver
         saver = tf.train.Saver()
 
-        """Start Training"""
+        ###### Start Training ######
         step = 0
         n_batches = int(len(content_imgs_path) // BATCH_SIZE)
 
@@ -124,7 +125,7 @@ def train(style_weight, content_imgs_path, style_imgs_path, encoder_path, save_p
                     step += 1
 
                     if step % 1000 == 0:
-                        saver.save(sess, save_path, global_step=step, write_meta_graph=False)
+                        saver.save(sess, model_save_path, global_step=step, write_meta_graph=False)
 
                     if debug:
                         is_last_step = (epoch == EPOCHS - 1) and (batch == n_batches - 1)
@@ -138,14 +139,14 @@ def train(style_weight, content_imgs_path, style_imgs_path, encoder_path, save_p
                             print('content loss: %.3f' % (_content_loss))
                             print('style loss  : %.3f,  weighted style loss: %.3f\n' % (_style_loss, style_weight * _style_loss))
         except:
-            saver.save(sess, save_path, global_step=step)
+            saver.save(sess, model_save_path, global_step=step)
             print('\nSomething wrong happens! Current model is saved to <%s>\n' % tmp_save_path)
 
-        """Done Training & Save the model"""
-        saver.save(sess, save_path)
+        ###### Done Training & Save the model ######
+        saver.save(sess, model_save_path)
 
         if debug:
             elapsed_time = datetime.now() - start_time
             print('Done training! Elapsed time: %s' % elapsed_time)
-            print('Model is saved to: %s' % save_path)
+            print('Model is saved to: %s' % model_save_path)
 

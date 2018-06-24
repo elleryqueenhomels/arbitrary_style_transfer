@@ -65,27 +65,30 @@ def get_images(paths, height=None, width=None):
     return images
 
 
-def save_images(paths, datas, save_path, prefix=None, suffix=None):
-    if isinstance(paths, str):
-        paths = [paths]
+def save_images(datas, contents_path, styles_path, save_dir, suffix=None):
 
-    assert(len(paths) == len(datas))
+    assert(len(datas) == len(contents_path) * len(styles_path))
 
-    if not exists(save_path):
-        mkdir(save_path)
+    if not exists(save_dir):
+        mkdir(save_dir)
 
-    if prefix is None:
-        prefix = ''
     if suffix is None:
         suffix = ''
 
-    for i, path in enumerate(paths):
-        data = datas[i]
+    data_idx = 0
+    for content_path in contents_path:
+        for style_path in styles_path:
+            data = datas[data_idx]
+            data_idx += 1
 
-        name, ext = splitext(path)
-        name = name.split(sep)[-1]
-        
-        path = join(save_path, prefix + name + suffix + ext)
+            content_path_name, content_ext = splitext(content_path)
+            style_path_name, style_ext = splitext(style_path)
 
-        imsave(path, data)
+            content_name = content_path_name.split(sep)[-1]
+            style_name = style_path_name.split(sep)[-1]
+            
+            save_path = join(save_dir, '%s-%s%s%s' % 
+                (content_name, style_name, suffix, content_ext))
+
+            imsave(save_path, data)
 

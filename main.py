@@ -10,8 +10,8 @@ from utils import list_images
 IS_TRAINING = False
 
 # for training
-CONTENT_IMGS_DIR = '../MS_COCO'
-STYLE_IMGS_DIR = '../WikiArt'
+TRAINING_CONTENT_DIR = '../MS_COCO'
+TRAINING_STYLE_DIR = '../WikiArt'
 ENCODER_WEIGHTS_PATH = 'vgg19_normalised.npz'
 LOGGING_PERIOD = 20
 
@@ -21,24 +21,20 @@ MODEL_SAVE_PATHS = [
 ]
 
 # for inferring (stylize)
-CONTENTS_DIR = 'images/content/'
-STYLES_DIR = 'images/style/'
-OUTPUT_DIR = 'outputs'
-STYLES = [
-    'cat', 'mosaic', 'escher_sphere',
-    'lion', 'udnie', 'woman_matisse',
-]
+INFERRING_CONTENT_DIR = 'images/content'
+INFERRING_STYLE_DIR = 'images/style'
+OUTPUTS_DIR = 'outputs'
 
 
 def main():
 
     if IS_TRAINING:
 
-        content_imgs_path = list_images(CONTENT_IMGS_DIR)
-        style_imgs_path   = list_images(STYLE_IMGS_DIR)
+        content_imgs_path = list_images(TRAINING_CONTENT_DIR)
+        style_imgs_path   = list_images(TRAINING_STYLE_DIR)
 
         for style_weight, model_save_path in zip(STYLE_WEIGHTS, MODEL_SAVE_PATHS):
-            print('\nBegin to train the network with the style weight: %.2f ...\n' % style_weight)
+            print('\n>>> Begin to train the network with the style weight: %.2f\n' % style_weight)
 
             train(style_weight, content_imgs_path, style_imgs_path, ENCODER_WEIGHTS_PATH, 
                   model_save_path, logging_period=LOGGING_PERIOD, debug=True)
@@ -47,17 +43,17 @@ def main():
 
     else:
 
-        contents_path = list_images(CONTENTS_DIR)
+        content_imgs_path = list_images(INFERRING_CONTENT_DIR)
+        style_imgs_path   = list_images(INFERRING_STYLE_DIR)
 
-        for style_name in STYLES:
-            print('\nUse "%s.jpg" as style to generate images:' % style_name)
+        for style_weight, model_save_path in zip(STYLE_WEIGHTS, MODEL_SAVE_PATHS):
+            print('\n>>> Begin to stylize images with style weight: %.2f\n' % style_weight)
 
-            for style_weight, model_save_path in zip(STYLE_WEIGHTS, MODEL_SAVE_PATHS):
-                print('\nBegin to generate images with the style weight: %.2f ...\n' % style_weight)
+            stylize(content_imgs_path, style_imgs_path, OUTPUTS_DIR, 
+                    ENCODER_WEIGHTS_PATH, model_save_path, 
+                    suffix='-' + str(style_weight))
 
-                style_path = STYLES_DIR + style_name + '.jpg'
-                generated_images = stylize(contents_path, style_path, ENCODER_WEIGHTS_PATH, model_save_path, 
-                    output_path=OUTPUT_DIR, prefix=style_name + '-', suffix='-' + str(style_weight))
+        print('\n>>> Successfully! Done all stylizing...\n')
 
 
 if __name__ == '__main__':
