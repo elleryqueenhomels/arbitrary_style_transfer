@@ -138,9 +138,10 @@ def train(style_weight, content_imgs_path, style_imgs_path, encoder_path,
                             print('step: %d,  total loss: %.3f,  elapsed time: %s' % (step, _loss, elapsed_time))
                             print('content loss: %.3f' % (_content_loss))
                             print('style loss  : %.3f,  weighted style loss: %.3f\n' % (_style_loss, style_weight * _style_loss))
-        except:
+        except Exception as ex:
             saver.save(sess, model_save_path, global_step=step)
-            print('\nSomething wrong happens! Current model is saved to <%s>\n' % tmp_save_path)
+            print('\nSomething wrong happens! Current model is saved to <%s>' % tmp_save_path)
+            print('Error message: %s' % str(ex))
 
         ###### Done Training & Save the model ######
         saver.save(sess, model_save_path)
