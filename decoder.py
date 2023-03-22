@@ -4,32 +4,29 @@
 
 import tensorflow as tf
 
-
 class Decoder(object):
 
     def __init__(self):
         self.weight_vars = []
 
-        with tf.variable_scope('decoder'):
-            self.weight_vars.append(self._create_variables(512, 256, 3, scope='conv4_1'))
+        self.weight_vars.append(self._create_variables(512, 256, 3, scope='conv4_1'))
 
-            self.weight_vars.append(self._create_variables(256, 256, 3, scope='conv3_4'))
-            self.weight_vars.append(self._create_variables(256, 256, 3, scope='conv3_3'))
-            self.weight_vars.append(self._create_variables(256, 256, 3, scope='conv3_2'))
-            self.weight_vars.append(self._create_variables(256, 128, 3, scope='conv3_1'))
+        self.weight_vars.append(self._create_variables(256, 256, 3, scope='conv3_4'))
+        self.weight_vars.append(self._create_variables(256, 256, 3, scope='conv3_3'))
+        self.weight_vars.append(self._create_variables(256, 256, 3, scope='conv3_2'))
+        self.weight_vars.append(self._create_variables(256, 128, 3, scope='conv3_1'))
 
-            self.weight_vars.append(self._create_variables(128, 128, 3, scope='conv2_2'))
-            self.weight_vars.append(self._create_variables(128,  64, 3, scope='conv2_1'))
+        self.weight_vars.append(self._create_variables(128, 128, 3, scope='conv2_2'))
+        self.weight_vars.append(self._create_variables(128,  64, 3, scope='conv2_1'))
 
-            self.weight_vars.append(self._create_variables( 64,  64, 3, scope='conv1_2'))
-            self.weight_vars.append(self._create_variables( 64,   3, 3, scope='conv1_1'))
+        self.weight_vars.append(self._create_variables( 64,  64, 3, scope='conv1_2'))
+        self.weight_vars.append(self._create_variables( 64,   3, 3, scope='conv1_1'))
 
     def _create_variables(self, input_filters, output_filters, kernel_size, scope):
-        with tf.variable_scope(scope):
-            shape  = [kernel_size, kernel_size, input_filters, output_filters]
-            kernel = tf.get_variable(initializer=tf.contrib.layers.xavier_initializer(uniform=False), shape=shape, name='kernel')
-            bias = tf.get_variable(initializer=tf.contrib.layers.xavier_initializer(uniform=False), shape=[output_filters], name='bias')
-            return (kernel, bias)
+        shape  = [kernel_size, kernel_size, input_filters, output_filters]
+        kernel = tf.compat.v1.get_variable(initializer=tf.keras.initializers.glorot_normal(), shape=shape, name='kernel')
+        bias = tf.compat.v1.get_variable(initializer=tf.keras.initializers.glorot_normal(), shape=[output_filters], name='bias')
+        return (kernel, bias)
 
     def decode(self, image):
         # upsampling after 'conv4_1', 'conv3_1', 'conv2_1'
@@ -50,7 +47,6 @@ class Decoder(object):
 
         return out
 
-
 def conv2d(x, kernel, bias, use_relu=True):
     # padding image with reflection mode
     x_padded = tf.pad(x, [[0, 0], [1, 1], [1, 1], [0, 0]], mode='REFLECT')
@@ -64,11 +60,9 @@ def conv2d(x, kernel, bias, use_relu=True):
 
     return out
 
-
 def upsample(x, scale=2):
     height = tf.shape(x)[1] * scale
     width  = tf.shape(x)[2] * scale
-    output = tf.image.resize_images(x, [height, width], 
+    output = tf.image.resize(x, [height, width], 
         method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
     return output
-

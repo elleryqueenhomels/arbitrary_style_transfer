@@ -7,7 +7,6 @@ from encoder import Encoder
 from decoder import Decoder
 from adaptive_instance_norm import AdaIN
 
-
 class StyleTransferNet(object):
 
     def __init__(self, encoder_weights_path):
@@ -47,4 +46,3 @@ class StyleTransferNet(object):
         generated_img = tf.clip_by_value(generated_img, 0.0, 255.0)
 
         return generated_img
-

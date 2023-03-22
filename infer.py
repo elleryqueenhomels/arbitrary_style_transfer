@@ -15,21 +15,21 @@ def stylize(contents_path, styles_path, output_dir, encoder_path, model_path,
     if isinstance(styles_path, str):
         styles_path = [styles_path]
 
-    with tf.Graph().as_default(), tf.Session() as sess:
+    with tf.Graph().as_default(), tf.compat.v1.Session() as sess:
         # build the dataflow graph
-        content = tf.placeholder(
+        content = tf.compat.v1.placeholder(
             tf.float32, shape=(1, None, None, 3), name='content')
-        style   = tf.placeholder(
+        style   = tf.compat.v1.placeholder(
             tf.float32, shape=(1, None, None, 3), name='style')
 
         stn = StyleTransferNet(encoder_path)
 
         output_image = stn.transform(content, style)
 
-        sess.run(tf.global_variables_initializer())
+        sess.run(tf.compat.v1.global_variables_initializer())
 
         # restore the trained model and run the style transferring
-        saver = tf.train.Saver()
+        saver = tf.compat.v1.train.Saver()
         saver.restore(sess, model_path)
 
         outputs = []

@@ -29,22 +29,20 @@ class Encoder(object):
         self.weight_vars = []
 
         # create the TensorFlow variables
-        with tf.variable_scope('encoder'):
-            for layer in ENCODER_LAYERS:
-                kind = layer[:4]
+        for layer in ENCODER_LAYERS:
+            kind = layer[:4]
 
-                if kind == 'conv':
-                    kernel = weights['arr_%d' % idx].transpose([2, 3, 1, 0])
-                    bias   = weights['arr_%d' % (idx + 1)]
-                    kernel = kernel.astype(np.float32)
-                    bias   = bias.astype(np.float32)
-                    idx += 2
+            if kind == 'conv':
+                kernel = weights['arr_%d' % idx].transpose([2, 3, 1, 0])
+                bias   = weights['arr_%d' % (idx + 1)]
+                kernel = kernel.astype(np.float32)
+                bias   = bias.astype(np.float32)
+                idx += 2
 
-                    with tf.variable_scope(layer):
-                        W = tf.Variable(kernel, trainable=False, name='kernel')
-                        b = tf.Variable(bias,   trainable=False, name='bias')
+                W = tf.Variable(kernel, trainable=False, name='kernel')
+                b = tf.Variable(bias,   trainable=False, name='bias')
 
-                    self.weight_vars.append((W, b))
+                self.weight_vars.append((W, b))
 
     def encode(self, image):
         # create the computational graph
@@ -86,7 +84,6 @@ class Encoder(object):
         else:
             return image + np.array([123.68, 116.779, 103.939])
 
-
 def conv2d(x, kernel, bias):
     # padding image with reflection mode
     x_padded = tf.pad(x, [[0, 0], [1, 1], [1, 1], [0, 0]], mode='REFLECT')
@@ -97,7 +94,5 @@ def conv2d(x, kernel, bias):
 
     return out
 
-
 def pool2d(x):
     return tf.nn.max_pool(x, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
-

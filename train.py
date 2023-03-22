@@ -42,9 +42,9 @@ def train(style_weight, content_imgs_path, style_imgs_path, encoder_path,
     INPUT_SHAPE = (BATCH_SIZE, HEIGHT, WIDTH, CHANNELS)
 
     # create the graph
-    with tf.Graph().as_default(), tf.Session() as sess:
-        content = tf.placeholder(tf.float32, shape=INPUT_SHAPE, name='content')
-        style   = tf.placeholder(tf.float32, shape=INPUT_SHAPE, name='style')
+    with tf.Graph().as_default(), tf.compat.v1.Session() as sess:
+        content = tf.compat.v1.placeholder(tf.float32, shape=INPUT_SHAPE, name='content')
+        style   = tf.compat.v1.placeholder(tf.float32, shape=INPUT_SHAPE, name='style')
 
         # create the style transfer net
         stn = StyleTransferNet(encoder_path)
@@ -87,13 +87,13 @@ def train(style_weight, content_imgs_path, style_imgs_path, encoder_path,
 
         # Training step
         global_step = tf.Variable(0, trainable=False)
-        learning_rate = tf.train.inverse_time_decay(LEARNING_RATE, global_step, DECAY_STEPS, LR_DECAY_RATE)
-        train_op = tf.train.AdamOptimizer(learning_rate).minimize(loss, global_step=global_step)
+        learning_rate = tf.compat.v1.train.inverse_time_decay(LEARNING_RATE, global_step, DECAY_STEPS, LR_DECAY_RATE)
+        train_op = tf.compat.v1.train.AdamOptimizer(learning_rate).minimize(loss, global_step=global_step)
 
-        sess.run(tf.global_variables_initializer())
+        sess.run(tf.compat.v1.global_variables_initializer())
 
         # saver
-        saver = tf.train.Saver(max_to_keep=10)
+        saver = tf.compat.v1.train.Saver(max_to_keep=10)
 
         ###### Start Training ######
         step = 0
@@ -140,7 +140,7 @@ def train(style_weight, content_imgs_path, style_imgs_path, encoder_path,
                             print('style loss  : %.3f,  weighted style loss: %.3f\n' % (_style_loss, style_weight * _style_loss))
         except Exception as ex:
             saver.save(sess, model_save_path, global_step=step)
-            print('\nSomething wrong happens! Current model is saved to <%s>' % tmp_save_path)
+            print('\nSomething wrong happens! Current model is saved to <%s>' % model_save_path)
             print('Error message: %s' % str(ex))
 
         ###### Done Training & Save the model ######

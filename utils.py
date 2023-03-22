@@ -6,7 +6,6 @@ from os import listdir, mkdir, sep
 from os.path import join, exists, splitext
 from scipy.misc import imread, imsave, imresize
 
-
 def list_images(directory):
     images = []
     for file in listdir(directory):
