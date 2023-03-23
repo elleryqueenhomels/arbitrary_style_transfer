@@ -4,7 +4,8 @@ import numpy as np
 
 from os import listdir, mkdir, sep
 from os.path import join, exists, splitext
-from scipy.misc import imread, imsave, imresize
+from imageio import imread, imsave
+from skimage.transform import resize
 
 def list_images(directory):
     images = []
@@ -32,7 +33,7 @@ def get_train_images(paths, resize_len=512, crop_height=256, crop_width=256):
             new_width  = resize_len
             new_height = int(height * new_width / width)
 
-        image = imresize(image, [new_height, new_width], interp='nearest')
+        image = resize(image, [new_height, new_width])
 
         # crop the image
         start_h = np.random.choice(new_height - crop_height + 1)
@@ -55,7 +56,7 @@ def get_images(paths, height=None, width=None):
         image = imread(path, mode='RGB')
 
         if height is not None and width is not None:
-            image = imresize(image, [height, width], interp='nearest')
+            image = resize(image, [height, width])
 
         images.append(image)
 
