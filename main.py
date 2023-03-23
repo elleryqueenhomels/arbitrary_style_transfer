@@ -1,34 +1,44 @@
 # Demo - train the style transfer network & use it to generate an image
 
-from __future__ import print_function
+import argparse
 
 from train import train
 from infer import stylize
 from utils import list_images
 
+parser = argparse.ArgumentParser()
 
-IS_TRAINING = False
+parser.add_argument("--is_training", type=bool, default=False, help="Using training mode, default value is False")
+parser.add_argument("--training_content_dir", default="../MS_COCO", help="Content image directory for training")
+parser.add_argument("--training_style_dir", default="../WikiArt", help="Style image directory for training")
+parser.add_argument("--encoder_weights_path", default="vgg19_normalised.npz", help="Encoder weights file path")
+parser.add_argument("--logging_period", type=int, default=20, help="Logging period, default value is 20")
+parser.add_argument("--inferring_content_dir", default="images/content", help="Content image directory for inferring")
+parser.add_argument("--inferring_style_dir", default="images/style", help="Style image directory for inferring")
+parser.add_argument("--output_dir", default="outputs", help="Output directory for inferring")
+
+args = parser.parse_args()
 
 # for training
-TRAINING_CONTENT_DIR = '../MS_COCO'
-TRAINING_STYLE_DIR = '../WikiArt'
-ENCODER_WEIGHTS_PATH = 'vgg19_normalised.npz'
-LOGGING_PERIOD = 20
-
 STYLE_WEIGHTS = [2.0]
 MODEL_SAVE_PATHS = [
     'models/style_weight_2e0.ckpt',
 ]
 
+TRAINING_CONTENT_DIR = args.training_content_dir
+TRAINING_STYLE_DIR = args.training_style_dir
+ENCODER_WEIGHTS_PATH = args.encoder_weights_path
+LOGGING_PERIOD = args.logging_period
+
 # for inferring (stylize)
-INFERRING_CONTENT_DIR = 'images/content'
-INFERRING_STYLE_DIR = 'images/style'
-OUTPUTS_DIR = 'outputs'
+INFERRING_CONTENT_DIR = args.inferring_content_dir
+INFERRING_STYLE_DIR = args.inferring_style_dir
+OUTPUTS_DIR = args.output_dir
 
 
 def main():
 
-    if IS_TRAINING:
+    if args.is_training:
 
         content_imgs_path = list_images(TRAINING_CONTENT_DIR)
         style_imgs_path   = list_images(TRAINING_STYLE_DIR)
@@ -58,4 +68,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
