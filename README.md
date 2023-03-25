@@ -12,7 +12,7 @@ System overview. Picture comes from Huang et al. original paper. The encoder is 
 
 ## Prerequisites
 - [Pre-trained VGG19 normalised network](https://s3.amazonaws.com/xunhuang-public/adain/vgg_normalised.t7) (MD5 `c637adfa9cee4b33b59c5a754883ba82`) <br/><b>I have provided a convertor in the `tool` folder. It can extract kernel and bias from the torch model file (.t7 format) and save them into a npz file which is easier to process via NumPy.</b> <br/><b>Or you can simply download my pre-processed file:</b> <br/>[Pre-trained VGG19 normalised network npz format](https://s3-us-west-2.amazonaws.com/wengaoye/vgg19_normalised.npz) (MD5 `c5c961738b134ffe206e0a552c728aea`)
-- [Microsoft COCO dataset](http://msvocds.blob.core.windows.net/coco2014/train2014.zip)
+- [Microsoft COCO dataset](http://images.cocodataset.org/zips/train2014.zip)
 - [WikiArt dataset](https://www.kaggle.com/c/painter-by-numbers)
 
 ## Trained Model
